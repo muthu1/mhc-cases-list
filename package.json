@@ -1,0 +1,7 @@
+{
+  "name": "mhc-causelist",
+  "private": true,
+  "dependencies": {
+    "pdfkit": "^0.19.1"
+  }
+}

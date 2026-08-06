@@ -1,0 +1,40 @@
+name: Daily MHC Cause List
+
+on:
+  schedule:
+    - cron: '30 14 * * *' # 14:30 UTC = 8:00 PM IST
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - mhc_cases.js
+      - package.json
+      - .github/workflows/daily.yml
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate cause list PDF
+        run: node mhc_cases.js
+
+      - name: Commit PDF to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase
+          git add pdfs
+          git diff --cached --quiet || git commit -m "Add daily cause list PDF [skip ci]"
+          git push
