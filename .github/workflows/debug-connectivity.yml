@@ -1,0 +1,19 @@
+name: Debug connectivity
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: curl HEAD request
+        run: |
+          echo '== curl -I =='
+          curl -sv --max-time 30 -o /dev/null -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' 'https://mhc.tn.gov.in/judis/clists/clists-madras/api/result.php?file=cause_07082026.xml' 2>&1 | tail -30 || echo 'CURL FAILED'
+      - name: curl body size
+        run: |
+          echo '== curl body =='
+          curl -s --max-time 60 --compressed -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' 'https://mhc.tn.gov.in/judis/clists/clists-madras/api/result.php?file=cause_07082026.xml' -o body.json || echo 'CURL FAILED'
+          wc -c body.json || true
+          head -c 200 body.json || true
