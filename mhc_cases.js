@@ -100,7 +100,11 @@ function advocateBlob(c) {
     if (Array.isArray(day)) data = day;
     console.log(`${data.length} records`);
   } catch (e) {
-    console.log(`no list available (${e.message})`);
+    // A fetch/parse failure is NOT the same as "no cases": producing an empty
+    // PDF here would misleadingly say the advocate has no cases tomorrow.
+    // Fail loudly instead so the workflow run is marked failed.
+    console.error(`\nERROR: could not fetch the cause list (${e.message}). Not generating a PDF.`);
+    process.exit(1);
   }
 
   const clean = s => s.replace(/\s+/g, ' ').replace(/[,\s]+$/, '').trim();
