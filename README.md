@@ -1,15 +1,11 @@
-# MHC Cause List
+# MHC Cases List
 
-Fetches the next day's Madras High Court daily cause list, filters the cases
+Fetches the next day's Madras High Court daily cases list, filters the cases
 where advocate **K.Chandrasekaran** appears (petitioner side, respondent side,
 or in a connected case), and generates a tabular PDF in [pdfs/](pdfs/).
 
-## Automation
-
-The GitHub Actions workflow [.github/workflows/daily.yml](.github/workflows/daily.yml)
-runs every day at **8:00 PM IST** (14:30 UTC), generates the PDF for the next
-day's list, and commits it to the `pdfs/` folder. It can also be run manually
-from the Actions tab (workflow_dispatch).
+The PDF has a second page listing only the cases where **State Bank of India**
+is a party; it is left empty when there are no such cases.
 
 If the next day's list is not published (weekends, holidays, or before the
 court uploads it), the PDF is still generated for that date with a
